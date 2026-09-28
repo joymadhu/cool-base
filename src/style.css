@@ -389,6 +389,16 @@ tr:last-child td { border-bottom: 0; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
   .js .reveal { opacity: 1; transform: none; }
+  /* The site's live motion always runs at full speed. */
+  .ticker-track { animation: marquee 70s linear infinite !important; }
+  .drop { animation: drop 1.4s var(--spring) both .1s !important; }
+  .swing { animation: swing 6s ease-in-out infinite 1.4s !important; }
+  .march { animation: march 1.6s linear infinite !important; }
+  .spark { animation: blink 1.6s steps(2, jump-none) infinite !important; }
+  .dot.live { animation: pxblink 1.2s steps(1) infinite !important; }
+  .stat.airmail { animation: airmail 6s linear infinite !important; }
+  .stat.hatch::before { animation: hatchMove 8s linear infinite !important; }
+  .grad, .hl::after { animation: none; }
 }
 .masthead.scrolled { box-shadow: 0 6px 20px rgba(10, 12, 40, .06); }
 

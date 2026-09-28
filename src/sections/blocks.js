@@ -8,44 +8,55 @@ import { pushBlock } from "../ui/mosaic.js";
 const blocks = new Map();
 let latest = 0;
 
+let polling = false;
+
 export async function pollBlocks() {
+  if (polling) return; // never stack polls on a slow RPC
+  polling = true;
   try {
     const [head, gas] = await rpc([["eth_blockNumber", []], ["eth_gasPrice", []]]);
+    if (gas != null) countTo($("statGas"), hex(gas) / 1e9, (v) => v.toFixed(4), { flash: false });
+    if (head == null) throw new Error("no block number");
     const headNum = hex(head);
-    countTo($("statGas"), hex(gas) / 1e9, (v) => v.toFixed(4), { flash: false });
+    countTo($("statBlock"), headNum, (v) => "#" + Math.round(v).toLocaleString(), { flash: false });
+    $("heroBlock").textContent = "#" + headNum.toLocaleString();
     if (headNum === latest) return renderBlockAges();
 
+    // Newest block with full transactions first, then headers for the rest.
     const from = Math.max(headNum - MAX_BLOCKS + 1, latest + 1);
     const nums = [];
-    for (let n = from; n <= headNum; n++) if (!blocks.has(n)) nums.push(n);
+    for (let n = headNum; n >= from; n--) if (!blocks.has(n)) nums.push(n);
     const res = await rpc(nums.map((n) => ["eth_getBlockByNumber", ["0x" + n.toString(16), n === headNum]]));
+    const got = [];
     res.forEach((b) => {
       if (!b) return;
       const n = hex(b.number);
-      blocks.set(n, {
+      const blk = {
         number: n, hash: b.hash, ts: hex(b.timestamp), txCount: b.transactions.length,
         gasUsed: hex(b.gasUsed), gasLimit: hex(b.gasLimit), fresh: latest !== 0,
-      });
+      };
+      blocks.set(n, blk);
+      got.push(blk);
       if (n === headNum) renderTxs(b);
     });
+    if (!got.length) throw new Error("no blocks returned");
     // Feed new blocks, oldest first, into the live mosaics.
-    [...blocks.values()].filter((b) => b.number > latest).sort((a, b) => a.number - b.number).forEach((b) => pushBlock(b));
-    latest = headNum;
+    got.filter((b) => b.number > latest).sort((a, b) => a.number - b.number).forEach((b) => pushBlock(b));
+    latest = Math.max(latest, ...got.map((b) => b.number));
     [...blocks.keys()].sort((a, b) => a - b).slice(0, Math.max(0, blocks.size - MAX_BLOCKS)).forEach((k) => blocks.delete(k));
     renderBlocks();
     stamp();
   } catch (e) {
     console.warn(e);
-    $("statBlockAge").textContent = "RPC unavailable — retrying";
+    if (!blocks.size) $("statBlockAge").textContent = "RPC busy — retrying";
+  } finally {
+    polling = false;
   }
 }
 
 function renderBlocks() {
   const list = [...blocks.values()].sort((a, b) => b.number - a.number);
   if (!list.length) return;
-  const top = list[0];
-  countTo($("statBlock"), top.number, (v) => "#" + Math.round(v).toLocaleString(), { flash: false });
-  $("heroBlock").textContent = "#" + top.number.toLocaleString();
   if (list.length > 1) {
     const span = list[0].ts - list[list.length - 1].ts;
     const txs = list.slice(0, -1).reduce((s, b) => s + b.txCount, 0);

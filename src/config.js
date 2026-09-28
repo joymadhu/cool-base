@@ -1,4 +1,4 @@
-export const RPCS = ["https://mainnet.base.org", "https://base-rpc.publicnode.com", "https://base.llamarpc.com"];
+export const RPCS = ["https://mainnet.base.org", "https://base-rpc.publicnode.com", "https://base.drpc.org", "https://base.llamarpc.com"];
 export const LLAMA_DEX = "https://api.llama.fi/overview/dexs/base?excludeTotalDataChartBreakdown=true";
 export const LLAMA_CHAINS = "https://api.llama.fi/v2/chains";
 export const DEXSCREENER = "https://api.dexscreener.com/latest/dex/search?q=";

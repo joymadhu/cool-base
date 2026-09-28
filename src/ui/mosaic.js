@@ -8,11 +8,13 @@ import { reduceMotion } from "../lib/dom.js";
 
 const CELL = 10; // css px per cell
 const GAP = 2;   // gap between squares
-const TICK_MS = 1000 / 14; // the field animates at a pixel-art 14 fps
+const TICK_MS = 1000 / 16; // the field animates at a pixel-art 16 fps
+// Panels always animate at full speed, whatever the OS motion setting.
+const SPEED = 1;
 
 const PALETTES = {
-  globe:   { 1: "#ffffff", 2: "#ffd3e8", 3: "#fff4c2", 4: "#ffffff", hover: "#ffffff" },
-  terrain: { 1: "#3f7f0c", 2: "#4f9214", 3: "#ffffff", 4: "#1f4f00", hover: "#ffffff" },
+  globe:   { 1: "#ffffff", 2: "#ffd3e8", 3: "#fff4c2", 4: "#ff5fa8", hover: "#ffffff" },
+  terrain: { 1: "#3f7f0c", 2: "#4f9214", 3: "#ffffff", 4: "#1b4300", hover: "#ffffff" },
   blob:    { 1: "#a8cbff", 2: "#dbe9ff", 3: "#0a1a4f", 4: "#ffffff", hover: "#ffffff" },
 };
 
@@ -46,7 +48,7 @@ function globe(p, t) {
   const { cols, rows } = p;
   const g = new Uint8Array(cols * rows);
   const cx = cols * 0.42, cy = rows * 0.46, R = Math.min(cols * 0.62, rows * 0.5);
-  const spin = t * 1.6; // cells per second of longitude
+  const spin = t * 5 * SPEED; // cells per second of longitude
   for (let r = 0; r < rows; r++) {
     const ny = (r - cy) / R;
     if (Math.abs(ny) >= 1) continue;
@@ -78,6 +80,13 @@ function globe(p, t) {
   // Transaction sparkles.
   live.sparks = live.sparks.filter((k) => t - k.born < k.life);
   for (const k of live.sparks) if (k.i < g.length && g[k.i]) g[k.i] = 3;
+  // A satellite orbits the globe with a short pixel trail.
+  for (let k = 0; k < 6; k++) {
+    const a = t * 1.3 * SPEED - k * 0.07;
+    const sc = Math.round(cx + Math.cos(a) * (R + 3)), sr = Math.round(cy + Math.sin(a) * (R * 0.45 + 2));
+    const behind = Math.sin(a) < 0 && Math.hypot(sc - cx, sr - cy) < R;
+    if (!behind && sc >= 0 && sr >= 0 && sc < cols && sr < rows) g[sr * cols + sc] = k === 0 ? 4 : 3;
+  }
   p.geom = { cx, cy, R };
   return g;
 }
@@ -89,7 +98,7 @@ function terrain(p, t) {
   // Far ridge: the 120-day DEX volume history, drifting slowly left forever.
   const vol = live.volume && live.volume.length > 4 ? live.volume : Array.from({ length: 60 }, (_, i) => fbm(i * 0.15, 0, 5));
   const vMin = Math.min(...vol), vMax = Math.max(...vol);
-  const drift = t * 0.8;
+  const drift = t * 3 * SPEED;
   const volAt = (c) => {
     const f = ((((c + drift) / cols) * vol.length) % vol.length + vol.length) % vol.length;
     const i = Math.floor(f), k = f - i, a = vol[i], b = vol[(i + 1) % vol.length];
@@ -107,7 +116,9 @@ function terrain(p, t) {
     const hi = Math.round(rows * 0.44 - (0.08 + volAt(c) * 0.24) * rows);
     const j = c - offset;
     const txn = j >= 0 ? window[j] : tMin;
-    const norm = tMax > tMin ? (txn - tMin) / (tMax - tMin) : 0.5;
+    const base = tMax > tMin ? (txn - tMin) / (tMax - tMin) : 0.5;
+    // Bars pulse like a live equalizer on top of the real per-block values.
+    const norm = Math.max(0, Math.min(1, base * 0.75 + 0.12 + Math.sin(t * 3.2 * SPEED + c * 0.55) * 0.07 + Math.sin(t * 5.1 * SPEED + c * 1.7) * 0.04));
     const low = Math.round(rows - (0.14 + norm * 0.46) * rows);
     const newest = j === window.length - 1;
     for (let r = 0; r < rows; r++) {
@@ -115,10 +126,10 @@ function terrain(p, t) {
       if (r >= low) {
         if (newest && r === low && sinceBlock < 1.2) v = 3;        // the block that just landed
         else if (r - low < 2) v = newest ? 4 : 1;
-        else v = fbm(c * 0.2, r * 0.2, 11) > 0.62 ? 1 : hash(c + Math.floor(t * 2), r, 4) < 0.68 ? 2 : 0; // shimmering texture
+        else v = fbm(c * 0.2, r * 0.2, 11) > 0.62 ? 1 : hash(c + Math.floor(t * 8 * SPEED), r, 4) < 0.68 ? 2 : 0; // shimmering texture
       } else if (r >= hi && r < hi + 3) v = 1;
       else if (r >= hi + 3 && r < rows * 0.46) v = hash(c, r, 6) < 0.3 ? 2 : 0;
-      if (v === 0 && hash(c, r + Math.floor(t * 0.5), 21) < 0.004) v = 3; // drifting specks
+      if (v === 0 && hash(c, r + Math.floor(t * 4 * SPEED), 21) < 0.006) v = 3; // drifting specks
       g[r * cols + c] = v;
     }
   }
@@ -128,17 +139,29 @@ function terrain(p, t) {
 function blob(p, t) {
   const { cols, rows } = p;
   const g = new Uint8Array(cols * rows);
-  const flow = t * 0.22 * live.memeFlow;
+  const flow = t * 0.7 * live.memeFlow * SPEED;
   const on = (c, r) => c >= 0 && r >= 0 && c < cols && r < rows && fbm(c * 0.16 + flow * 0.3, r * 0.1 + flow, 17) + (c / cols) * 0.38 > 0.72;
   for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
     if (!on(c, r)) continue;
     const edge = !on(c - 1, r) || !on(c + 1, r) || !on(c, r - 1) || !on(c, r + 1);
-    g[r * cols + c] = edge && hash(c, r, 2) < 0.55 ? 3 : (c + r + Math.floor(t * 3)) % 2 ? 1 : 2;
+    g[r * cols + c] = edge && hash(c, r, 2) < 0.55 ? 3 : (c + r + Math.floor(t * 6 * SPEED)) % 2 ? 1 : 2;
   }
   return g;
 }
 
 const SHAPES = { globe, terrain, blob };
+
+// A bright diagonal shimmer sweeps across every panel every few seconds.
+function glint(p, t) {
+  const { grid, cols, rows } = p;
+  const span = cols + rows, period = 3.2 / SPEED;
+  const phase = ((t + (p.kind === "terrain" ? 1 : p.kind === "blob" ? 2 : 0)) % period) / period;
+  const pos = phase * (span + 20) - 10;
+  for (let r = 0; r < rows; r++) {
+    const c0 = Math.max(0, Math.floor(pos - r - 1)), c1 = Math.min(cols - 1, Math.ceil(pos - r + 1));
+    for (let c = c0; c <= c1; c++) { const i = r * cols + c; if (grid[i]) grid[i] = p.kind === "terrain" ? 3 : 4; }
+  }
+}
 
 // ---------- renderer ----------
 const panels = [];
@@ -214,12 +237,12 @@ function loop() {
     raf = 0;
     const visible = panels.filter((p) => p.visible && p.grid);
     if (!visible.length) return; // sleeps until a panel scrolls back into view
-    if (reduceMotion) { visible.forEach((p) => draw(p, now)); return; }
     if (now - lastTick >= TICK_MS) {
       lastTick = now;
       const t = clock();
       visible.forEach((p) => {
         p.grid = SHAPES[p.kind](p, t);
+        glint(p, t);
         p.twinkle.clear();
         for (let i = 0; i < 5; i++) {
           const idx = Math.floor(Math.random() * p.grid.length);
