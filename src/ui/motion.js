@@ -15,23 +15,53 @@ export function initMotion() {
     revealIO.observe(el);
   });
 
-  const nav = $("nav"), ink = $("navInk");
+  // Nav: a soft pill follows the pointer, a pixel-bordered pill marks the current section.
+  const nav = $("nav"), ink = $("navInk"), hover = $("navHover");
   const links = [...nav.querySelectorAll("a")];
-  function moveInk(a) {
-    if (!a) { ink.style.opacity = 0; return; }
-    ink.style.opacity = 1;
-    ink.style.width = a.offsetWidth + "px";
-    ink.style.transform = `translateX(${a.offsetLeft}px)`;
-    links.forEach((l) => l.classList.toggle("active", l === a));
+  const mobileLinks = [...document.querySelectorAll("#mobileMenu a")];
+  const place = (pill, a) => {
+    pill.style.width = a.offsetWidth + "px";
+    pill.style.transform = `translateX(${a.offsetLeft}px)`;
+  };
+  let active = null;
+  function setActive(id) {
+    active = links.find((l) => l.getAttribute("href") === "#" + id) || null;
+    links.forEach((l) => l.classList.toggle("active", l === active));
+    mobileLinks.forEach((l) => l.classList.toggle("active", l.getAttribute("href") === "#" + id));
+    if (active) { place(ink, active); ink.style.opacity = 1; } else ink.style.opacity = 0;
   }
-  const sectionIO = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      if (e.isIntersecting && scrollY >= 200) moveInk(links.find((l) => l.getAttribute("href") === "#" + e.target.id));
+  links.forEach((a) => {
+    a.addEventListener("pointerenter", () => {
+      if (a === active) { hover.style.opacity = 0; return; }
+      // Jump into place without sliding when the pointer first enters the nav.
+      if (hover.style.opacity !== "1") { hover.style.transition = "none"; place(hover, a); void hover.offsetWidth; hover.style.transition = ""; }
+      place(hover, a);
+      hover.style.opacity = 1;
     });
-  }, { rootMargin: "-45% 0px -50% 0px" });
-  links.forEach((l) => { const s = document.querySelector(l.getAttribute("href")); if (s) sectionIO.observe(s); });
+    a.addEventListener("click", () => setActive(a.getAttribute("href").slice(1)));
+  });
+  nav.addEventListener("pointerleave", () => (hover.style.opacity = 0));
 
-  const topbar = $("topbar"), progress = $("progress");
+  const sectionIds = ["overview", "volume", "blocks", "activity", "tokens", "memes"];
+  const sectionIO = new IntersectionObserver((entries) => {
+    entries.forEach((e) => { if (e.isIntersecting && scrollY >= 200) setActive(e.target.id === "activity" ? "blocks" : e.target.id); });
+  }, { rootMargin: "-45% 0px -50% 0px" });
+  sectionIds.forEach((id) => { const s = $(id); if (s) sectionIO.observe(s); });
+  addEventListener("resize", () => active && place(ink, active));
+  document.fonts?.ready.then(() => active && place(ink, active));
+
+  // Mobile menu
+  const masthead = $("topbar"), menuBtn = $("menuBtn");
+  const setMenu = (open) => {
+    masthead.classList.toggle("menu-open", open);
+    menuBtn.setAttribute("aria-expanded", String(open));
+    menuBtn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+  };
+  menuBtn.addEventListener("click", () => setMenu(!masthead.classList.contains("menu-open")));
+  mobileLinks.forEach((a) => a.addEventListener("click", () => setMenu(false)));
+  addEventListener("keydown", (e) => { if (e.key === "Escape") setMenu(false); });
+
+  const progress = $("progress");
   let scrollQueued = false;
   addEventListener("scroll", () => {
     if (scrollQueued) return;
@@ -40,8 +70,8 @@ export function initMotion() {
       scrollQueued = false;
       const max = document.documentElement.scrollHeight - innerHeight;
       progress.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
-      topbar.classList.toggle("scrolled", scrollY > 10);
-      if (scrollY < 200) moveInk(null);
+      masthead.classList.toggle("scrolled", scrollY > 10);
+      if (scrollY < 200 && active) setActive(null);
     });
   }, { passive: true });
 

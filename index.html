@@ -13,26 +13,38 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230000FF'/></svg>">
 </head>
 <body>
-  <div class="progress" id="progress" aria-hidden="true"></div>
-
-  <header class="topbar" id="topbar">
-    <a class="brand" href="#top">
-      <svg class="logo" viewBox="0 0 34 14" aria-hidden="true"><rect x="0" y="0" width="3" height="14"/><rect x="3" y="5" width="7" height="9"/><rect x="11" y="5" width="7" height="9"/><rect x="19" y="5" width="7" height="9"/><rect x="27" y="5" width="7" height="9"/></svg>
-      <span>Base Cool</span>
-    </a>
-    <nav class="nav" id="nav">
-      <a href="#overview">Overview</a>
-      <a href="#volume">Volume</a>
-      <a href="#blocks">Blocks</a>
-      <a href="#tokens">Tokens</a>
-      <a href="#memes">Memes</a>
-      <span class="nav-ink" id="navInk"></span>
+  <div class="masthead" id="topbar">
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="Base Cool home">
+        <svg class="logo" viewBox="0 0 34 14" aria-hidden="true"><rect x="0" y="0" width="3" height="14"/><rect x="3" y="5" width="7" height="9"/><rect x="11" y="5" width="7" height="9"/><rect x="19" y="5" width="7" height="9"/><rect x="27" y="5" width="7" height="9"/></svg>
+        <span>Base Cool</span>
+      </a>
+      <nav class="nav" id="nav" aria-label="Sections">
+        <span class="nav-hover" id="navHover" aria-hidden="true"></span>
+        <span class="nav-ink" id="navInk" aria-hidden="true"></span>
+        <a href="#overview"><span class="n">01</span>Overview</a>
+        <a href="#volume"><span class="n">02</span>Volume</a>
+        <a href="#blocks"><span class="n">03</span>Blocks</a>
+        <a href="#tokens"><span class="n">05</span>Tokens</a>
+        <a href="#memes"><span class="n">06</span>Memes</a>
+      </nav>
+      <div class="top-right">
+        <span class="status" title="Latest Base block"><span class="dot live"></span><span class="px">Live</span><span class="mono" id="heroBlock">syncing…</span></span>
+        <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu"><i></i><i></i><i></i></button>
+      </div>
+    </header>
+    <nav class="mobile-menu" id="mobileMenu" aria-label="Sections">
+      <a href="#overview"><span class="n">01</span>Overview</a>
+      <a href="#volume"><span class="n">02</span>Volume</a>
+      <a href="#blocks"><span class="n">03</span>Blocks</a>
+      <a href="#activity"><span class="n">04</span>Activity</a>
+      <a href="#tokens"><span class="n">05</span>Tokens</a>
+      <a href="#memes"><span class="n">06</span>Memes</a>
     </nav>
-    <span class="status"><span class="dot live"></span><span class="px">LIVE</span> <span class="mono" id="heroBlock">syncing…</span></span>
-  </header>
-
-  <div class="ticker" aria-label="Live prices">
-    <div class="ticker-track" id="ticker"><span class="tick">LOADING LIVE PRICES…</span></div>
+    <div class="ticker" aria-label="Live prices">
+      <div class="ticker-track" id="ticker"><span class="tick">Loading live prices…</span></div>
+    </div>
+    <div class="progress" aria-hidden="true"><i id="progress"></i></div>
   </div>
 
   <main id="top">
