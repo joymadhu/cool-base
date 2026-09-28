@@ -1,6 +1,6 @@
-import { $, reduceMotion } from "../lib/dom.js";
+import { $ } from "../lib/dom.js";
 
-// Scroll reveals, sliding nav highlight, scroll progress bar and pointer-following glow/tilt.
+// Scroll reveals, sliding nav highlight, scroll progress bar and scroll-state header.
 export function initMotion() {
   const revealIO = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
@@ -45,20 +45,4 @@ export function initMotion() {
     });
   }, { passive: true });
 
-  document.addEventListener("pointermove", (e) => {
-    const el = e.target.closest?.(".card, .meme");
-    if (!el) return;
-    const r = el.getBoundingClientRect();
-    const x = e.clientX - r.left, y = e.clientY - r.top;
-    el.style.setProperty("--mx", x + "px");
-    el.style.setProperty("--my", y + "px");
-    if (el.classList.contains("meme") && !reduceMotion) {
-      const rx = (y / r.height - 0.5) * -10, ry = (x / r.width - 0.5) * 12;
-      el.style.transform = `perspective(700px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-4px)`;
-    }
-  }, { passive: true });
-  document.addEventListener("pointerout", (e) => {
-    const el = e.target.closest?.(".meme");
-    if (el && !el.contains(e.relatedTarget)) el.style.transform = "";
-  });
 }

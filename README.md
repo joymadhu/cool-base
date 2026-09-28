@@ -9,7 +9,7 @@ A live dashboard for the [Base](https://base.org) chain. It shows:
 - **Tokens**: top Base tokens by 24h volume (price, change, volume, liquidity, txns)
 - **Memes**: a meme board of Base memecoins ranked by 24h volume
 
-It comes with dark and light themes in Base blue. It follows the system theme by default, and the ◐ button toggles it.
+The look is white and pixel-art: pure Base blue with vertical-line hatching, airmail-dashed borders, a swinging crane sign in the hero, and pink / lime / blue pixel-mosaic panels (the lime one is drawn from real daily volume).
 
 ## Run it
 
@@ -32,7 +32,7 @@ src/main.js             app bootstrap and polling loops
 src/style.css           themes, layout and animations
 src/config.js           API endpoints, token and meme lists, poll intervals
 src/lib/                DOM helpers, API/RPC client, formatters, count-up animation
-src/ui/                 theme toggle and motion (scroll reveal, nav, glow, tilt)
+src/ui/                 motion (scroll reveal, nav, progress) and pixel mosaics
 src/sections/           blocks & activity, volume chart, tokens/memes/ticker
 ```
 

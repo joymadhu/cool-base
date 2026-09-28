@@ -38,12 +38,13 @@ function spark(t, id) {
   const pts = [c.h24, c.h6, c.h1, c.m5, 0].map((ch) => (isFinite(ch) ? p / (1 + ch / 100) : p));
   const min = Math.min(...pts), max = Math.max(...pts), W = 200, H = 36;
   const xy = pts.map((v, i) => [(i / (pts.length - 1)) * W, max === min ? H / 2 : H - 3 - ((v - min) / (max - min)) * (H - 6)]);
-  const line = xy.map(([x, y], i) => (i ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1)).join(" ");
-  const color = (t.change ?? 0) >= 0 ? "var(--up)" : "var(--down)";
+  // Stepped (pixel) line: hold each value, then jump.
+  const line = xy.map(([x, y], i) => (i ? `H${x.toFixed(1)} V${y.toFixed(1)}` : `M${x.toFixed(1)} ${y.toFixed(1)}`)).join(" ");
+  const color = (t.change ?? 0) >= 0 ? "var(--green)" : "var(--red)";
   return `<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
-    <defs><linearGradient id="sp${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${color}" stop-opacity=".35"/><stop offset="1" stop-color="${color}" stop-opacity="0"/></linearGradient></defs>
+    <defs><linearGradient id="sp${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${color}" stop-opacity=".22"/><stop offset="1" stop-color="${color}" stop-opacity="0"/></linearGradient></defs>
     <path d="${line} L${W} ${H} L0 ${H} Z" fill="url(#sp${id})"/>
-    <path d="${line}" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"><animate attributeName="stroke-dashoffset" to="0" dur="1.2s" fill="freeze" calcMode="spline" keySplines=".22 1 .36 1"/></path>
+    <path d="${line}" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" vector-effect="non-scaling-stroke" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"><animate attributeName="stroke-dashoffset" to="0" dur="1.2s" fill="freeze" calcMode="spline" keySplines=".22 1 .36 1"/></path>
   </svg>`;
 }
 

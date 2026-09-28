@@ -5,24 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Base Cool</title>
   <meta name="description" content="Base Cool — live Base chain blocks, activity, 24h and all-time-high volume, tokens and memes.">
-  <meta name="theme-color" content="#0052ff">
+  <meta name="theme-color" content="#ffffff">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Silkscreen&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   <script>document.documentElement.classList.add("js")</script>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='16' fill='%230052FF'/><rect x='6' y='14' width='20' height='4' rx='2' fill='white'/></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230000FF'/></svg>">
 </head>
 <body>
-  <div class="bg" aria-hidden="true">
-    <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
-    <div class="grid-lines"></div>
-  </div>
   <div class="progress" id="progress" aria-hidden="true"></div>
 
   <header class="topbar" id="topbar">
     <a class="brand" href="#top">
-      <span class="logo" aria-hidden="true"></span>
-      <span>Base <b>Cool</b></span>
+      <svg class="logo" viewBox="0 0 34 14" aria-hidden="true"><rect x="0" y="0" width="3" height="14"/><rect x="3" y="5" width="7" height="9"/><rect x="11" y="5" width="7" height="9"/><rect x="19" y="5" width="7" height="9"/><rect x="27" y="5" width="7" height="9"/></svg>
+      <span>Base Cool</span>
     </a>
     <nav class="nav" id="nav">
       <a href="#overview">Overview</a>
@@ -32,59 +28,98 @@
       <a href="#memes">Memes</a>
       <span class="nav-ink" id="navInk"></span>
     </nav>
-    <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
-      <svg class="sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
-      <svg class="moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
-    </button>
+    <span class="status"><span class="dot live"></span><span class="px">LIVE</span> <span class="mono" id="heroBlock">syncing…</span></span>
   </header>
 
   <div class="ticker" aria-label="Live prices">
-    <div class="ticker-track" id="ticker"><span class="tick muted">Loading live prices…</span></div>
+    <div class="ticker-track" id="ticker"><span class="tick">LOADING LIVE PRICES…</span></div>
   </div>
 
   <main id="top">
     <section class="hero">
       <div class="hero-text">
-        <span class="pill reveal"><span class="dot live"></span> Live on Base mainnet · <span class="mono" id="heroBlock">syncing…</span></span>
-        <h1 class="reveal"><span class="word">Base</span> <span class="word grad">Cool</span></h1>
-        <p class="reveal">The coolest way to watch Base: live blocks, on-chain activity, 24h and all-time-high volume, top tokens and the memes everyone's trading.</p>
+        <span class="eyebrow reveal">▮ Base mainnet · onchain dashboard</span>
+        <h1 class="reveal">Everything happening on Base, <span class="hl">live.</span></h1>
+        <p class="reveal">Blocks, activity, 24h and all-time-high volume, the top tokens and the memes everyone's trading, all in one place.</p>
         <div class="hero-cta reveal">
           <a class="btn primary" href="#volume">Explore volume <span aria-hidden="true">→</span></a>
-          <a class="btn ghost" href="#memes">Meme board 🐸</a>
+          <a class="btn ghost" href="#memes">Meme board</a>
         </div>
       </div>
-      <div class="hero-visual" aria-hidden="true">
-        <div class="ring r1"><i></i></div>
-        <div class="ring r2"><i></i></div>
-        <div class="ring r3"><i></i></div>
-        <div class="scene">
-          <div class="cube3d">
-            <span class="f front"></span><span class="f back"></span><span class="f right"></span>
-            <span class="f left"></span><span class="f top"></span><span class="f bottom"></span>
-          </div>
-        </div>
-        <div class="glow"></div>
+
+      <div class="hero-art" aria-hidden="true">
+        <svg viewBox="0 0 560 480" class="crane">
+          <defs>
+            <pattern id="hBlue" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="1.2" height="4" fill="#0000ff"/></pattern>
+            <pattern id="hBlueDense" width="3" height="3" patternUnits="userSpaceOnUse"><rect width="1.6" height="3" fill="#0000ff"/></pattern>
+            <pattern id="hLilac" width="3" height="3" patternUnits="userSpaceOnUse"><rect width="1.8" height="3" fill="#d58ff5"/></pattern>
+            <pattern id="hGreen" width="3" height="3" patternUnits="userSpaceOnUse"><rect width="1.4" height="3" fill="#12a150"/></pattern>
+            <pattern id="stripe" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="16" fill="url(#hBlueDense)"/></pattern>
+          </defs>
+
+          <g class="drop">
+            <!-- cable + hook block -->
+            <rect x="262" y="-40" width="36" height="96" fill="url(#stripe)"/>
+            <rect x="262" y="-40" width="36" height="96" fill="none" stroke="#0000ff" stroke-width="1.5"/>
+            <rect x="266" y="56" width="28" height="18" fill="url(#hGreen)"/>
+            <rect x="266" y="56" width="28" height="18" fill="none" stroke="#12a150" stroke-width="1.5"/>
+
+            <g class="swing">
+              <!-- hook -->
+              <path d="M280 74 V104 C280 118 258 118 256 134 C254 152 276 164 292 156 C304 150 308 138 304 128" fill="none" stroke="url(#hLilac)" stroke-width="16" stroke-linecap="square"/>
+              <path d="M280 74 V104 C280 118 258 118 256 134 C254 152 276 164 292 156 C304 150 308 138 304 128" fill="none" stroke="#d58ff5" stroke-width="1" transform="translate(0 0)" opacity=".6"/>
+              <!-- ropes -->
+              <path d="M280 160 L86 238 M280 160 L474 214" stroke="#12a150" stroke-width="2" stroke-dasharray="2 4" fill="none"/>
+              <!-- sign -->
+              <g class="sign" transform="rotate(-6 280 320)">
+                <rect x="70" y="222" width="420" height="220" rx="16" fill="#fff"/>
+                <rect x="70" y="222" width="420" height="220" rx="16" fill="url(#hBlue)" opacity=".55"/>
+                <rect x="76" y="228" width="408" height="208" rx="12" fill="none" stroke="#d58ff5" stroke-width="2"/>
+                <rect x="70" y="222" width="420" height="220" rx="16" fill="none" stroke="url(#hBlueDense)" stroke-width="12" stroke-dasharray="22 16" class="march"/>
+                <rect x="94" y="246" width="12" height="12" fill="url(#hGreen)"/>
+                <rect x="454" y="246" width="12" height="12" fill="url(#hGreen)"/>
+                <text x="280" y="322" text-anchor="middle" class="sign-t">Base</text>
+                <text x="280" y="402" text-anchor="middle" class="sign-t">Cool</text>
+              </g>
+            </g>
+          </g>
+
+          <!-- pixel sparkles -->
+          <g class="spark s1" fill="#0000ff"><rect x="40" y="120" width="6" height="18"/><rect x="34" y="126" width="18" height="6"/></g>
+          <g class="spark s2" fill="#d58ff5"><rect x="506" y="92" width="6" height="18"/><rect x="500" y="98" width="18" height="6"/></g>
+          <g class="spark s3" fill="#12a150"><rect x="520" y="420" width="5" height="15"/><rect x="515" y="425" width="15" height="5"/></g>
+        </svg>
       </div>
+    </section>
+
+    <section class="mosaics" aria-label="Highlights">
+      <a class="mosaic m-pink reveal" href="#blocks"><canvas data-mosaic="globe"></canvas><span class="m-label"><span class="px">Blocks</span><b>A new block every ~2s</b></span></a>
+      <a class="mosaic m-lime reveal" href="#volume"><canvas data-mosaic="terrain"></canvas><span class="m-label"><span class="px">Volume</span><b>Drawn from 120 days of DEX volume</b></span></a>
+      <a class="mosaic m-blue reveal" href="#memes"><canvas data-mosaic="blob"></canvas><span class="m-label"><span class="px">Memes</span><b>12 tracked</b></span></a>
     </section>
 
     <section class="chain-strip reveal" aria-label="Recent blocks stream">
+      <span class="eyebrow">▮ Block stream</span>
       <div class="chain" id="chain"></div>
     </section>
 
-    <section id="overview" class="grid stats">
-      <article class="card stat reveal"><h3><i class="ic">▦</i>Latest block</h3><p class="big mono" id="statBlock"><span class="sk w70"></span></p><span class="sub" id="statBlockAge">syncing…</span></article>
-      <article class="card stat reveal"><h3><i class="ic">⏱</i>Avg block time</h3><p class="big" id="statBlockTime"><span class="sk w50"></span></p><span class="sub">last 12 blocks</span></article>
-      <article class="card stat reveal"><h3><i class="ic">⚡</i>Transactions / sec</h3><p class="big" id="statTps"><span class="sk w50"></span></p><span class="sub">last 12 blocks</span></article>
-      <article class="card stat reveal"><h3><i class="ic">⛽</i>Gas price</h3><p class="big" id="statGas"><span class="sk w60"></span></p><span class="sub">gwei</span></article>
-      <article class="card stat accent reveal"><h3><i class="ic">↻</i>24h DEX volume</h3><p class="big" id="statVol24"><span class="sk w70"></span></p><span class="sub" id="statVolChange">all Base DEXs</span></article>
-      <article class="card stat gold reveal"><h3><i class="ic">★</i>All-time-high daily volume</h3><p class="big" id="statAth"><span class="sk w70"></span></p><span class="sub" id="statAthDate">—</span></article>
-      <article class="card stat reveal"><h3><i class="ic">▤</i>7d DEX volume</h3><p class="big" id="statVol7"><span class="sk w70"></span></p><span class="sub">all Base DEXs</span></article>
-      <article class="card stat reveal"><h3><i class="ic">◆</i>Total value locked</h3><p class="big" id="statTvl"><span class="sk w70"></span></p><span class="sub">DeFi on Base</span></article>
+    <section id="overview">
+      <div class="section-head reveal"><span class="eyebrow">01 / Overview</span><h2>Network at a glance</h2></div>
+      <div class="grid stats">
+        <article class="card stat reveal"><h3>Latest block</h3><p class="big mono" id="statBlock"><span class="sk w70"></span></p><span class="sub" id="statBlockAge">syncing…</span></article>
+        <article class="card stat reveal"><h3>Avg block time</h3><p class="big" id="statBlockTime"><span class="sk w50"></span></p><span class="sub">last 12 blocks</span></article>
+        <article class="card stat reveal"><h3>Transactions / sec</h3><p class="big" id="statTps"><span class="sk w50"></span></p><span class="sub">last 12 blocks</span></article>
+        <article class="card stat reveal"><h3>Gas price</h3><p class="big" id="statGas"><span class="sk w60"></span></p><span class="sub">gwei</span></article>
+        <article class="card stat hatch reveal"><h3>24h DEX volume</h3><p class="big" id="statVol24"><span class="sk w70"></span></p><span class="sub" id="statVolChange">all Base DEXs</span></article>
+        <article class="card stat airmail reveal"><h3>All-time-high daily volume</h3><p class="big" id="statAth"><span class="sk w70"></span></p><span class="sub" id="statAthDate">—</span></article>
+        <article class="card stat reveal"><h3>7d DEX volume</h3><p class="big" id="statVol7"><span class="sk w70"></span></p><span class="sub">all Base DEXs</span></article>
+        <article class="card stat reveal"><h3>Total value locked</h3><p class="big" id="statTvl"><span class="sk w70"></span></p><span class="sub">DeFi on Base</span></article>
+      </div>
     </section>
 
     <section id="volume" class="card reveal">
       <div class="card-head">
-        <div><h2>Daily DEX volume</h2><span class="sub">Gold bar = all-time high</span></div>
+        <div><span class="eyebrow">02 / Volume</span><h2>Daily DEX volume</h2><span class="sub"><i class="key k-blue"></i>daily volume <i class="key k-lilac"></i>all-time high</span></div>
         <div class="seg" id="rangeSeg">
           <span class="seg-ink"></span>
           <button data-days="30">30D</button>
@@ -106,13 +141,13 @@
 
     <div class="grid two">
       <section id="blocks" class="card reveal">
-        <div class="card-head"><h2>Latest blocks</h2><span class="pill small"><span class="dot live"></span> every ~2s</span></div>
+        <div class="card-head"><div><span class="eyebrow">03 / Blocks</span><h2>Latest blocks</h2></div><span class="chip"><span class="dot live"></span> every ~2s</span></div>
         <ul class="list" id="blockList">
           <li><span class="sk"></span></li><li><span class="sk"></span></li><li><span class="sk"></span></li><li><span class="sk"></span></li>
         </ul>
       </section>
       <section id="activity" class="card reveal">
-        <div class="card-head"><h2>Live activity</h2><span class="sub" id="activityBlock"></span></div>
+        <div class="card-head"><div><span class="eyebrow">04 / Activity</span><h2>Live transactions</h2></div><span class="sub" id="activityBlock"></span></div>
         <ul class="list" id="txList">
           <li><span class="sk"></span></li><li><span class="sk"></span></li><li><span class="sk"></span></li><li><span class="sk"></span></li>
         </ul>
@@ -120,7 +155,7 @@
     </div>
 
     <section id="tokens" class="card reveal">
-      <div class="card-head"><div><h2>Top tokens by 24h volume</h2><span class="sub">via DexScreener</span></div></div>
+      <div class="card-head"><div><span class="eyebrow">05 / Tokens</span><h2>Top tokens by 24h volume</h2></div><span class="sub">via DexScreener</span></div>
       <div class="table-wrap">
         <table>
           <thead><tr><th>Token</th><th class="r">Price</th><th class="r">24h</th><th class="r">24h volume</th><th class="r hide-sm">Liquidity</th><th class="r hide-sm">Txns 24h</th></tr></thead>
@@ -131,15 +166,15 @@
       </div>
     </section>
 
-    <section id="memes" class="reveal">
-      <div class="section-head"><h2>Meme board <span class="wiggle">🐸</span></h2><span class="sub">Base memecoins, ranked by 24h volume</span></div>
+    <section id="memes">
+      <div class="section-head reveal"><span class="eyebrow">06 / Memes</span><h2>Meme board</h2><span class="sub">Base memecoins, ranked by 24h volume</span></div>
       <div class="meme-grid" id="memeGrid">
         <div class="meme sk-card"></div><div class="meme sk-card"></div><div class="meme sk-card"></div><div class="meme sk-card"></div>
       </div>
     </section>
 
-    <section class="card learn reveal">
-      <h2>Base Cool 101</h2>
+    <section class="learn reveal">
+      <div class="section-head"><span class="eyebrow">07 / Learn</span><h2>Base Cool 101</h2></div>
       <div class="grid three">
         <div class="lesson"><span class="num">01</span><h4>What is Base?</h4><p>An Ethereum Layer 2 built on the OP Stack and incubated by Coinbase. Transactions settle to Ethereum at a fraction of the cost.</p></div>
         <div class="lesson"><span class="num">02</span><h4>Blocks</h4><p>Base produces a new block about every 2 seconds. Each block bundles transactions and is later posted to Ethereum.</p></div>
@@ -149,7 +184,7 @@
   </main>
 
   <footer class="footer">
-    <span>Base Cool · data from Base RPC, DefiLlama and DexScreener · not financial advice</span>
+    <span><b>Base Cool</b> · data from Base RPC, DefiLlama and DexScreener · not financial advice</span>
     <span id="updated"></span>
   </footer>
 

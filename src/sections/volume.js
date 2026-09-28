@@ -3,6 +3,7 @@ import { $ } from "../lib/dom.js";
 import { getJSON } from "../lib/api.js";
 import { countTo } from "../lib/countTo.js";
 import { usd, pct, esc, dateStr } from "../lib/format.js";
+import { setVolumeTerrain } from "../ui/mosaic.js";
 
 let volSeries = [];
 let rangeDays = 90;
@@ -22,6 +23,7 @@ export async function loadVolume() {
       $("statAthDate").textContent = "set " + dateStr(ath[0]);
     }
     drawChart(!hadSeries);
+    setVolumeTerrain(volSeries.slice(-120).map((p) => p[1]));
 
     const protos = (d.protocols || []).filter((p) => p.total24h > 0).sort((a, b) => b.total24h - a.total24h).slice(0, 10);
     const total = d.total24h || protos.reduce((s, p) => s + p.total24h, 0);
@@ -67,22 +69,22 @@ function drawChart(animate = true) {
 
   const ticks = [0, 0.25, 0.5, 0.75, 1].map((f) => {
     const v = (max / 1.05) * f, yy = y(v);
-    return `<line x1="${pad.l}" x2="${W - pad.r}" y1="${yy}" y2="${yy}" stroke="var(--border)" stroke-dasharray="${f ? "3 5" : ""}"/>
-      <text x="${pad.l - 10}" y="${yy + 4}" text-anchor="end" font-size="11" fill="var(--muted)">${usd(v, 1)}</text>`;
+    return `<line x1="${pad.l}" x2="${W - pad.r}" y1="${yy}" y2="${yy}" stroke="${f ? "var(--line)" : "var(--ink)"}" stroke-width="${f ? 1 : 1.5}" stroke-dasharray="${f ? "2 4" : ""}"/>
+      <text x="${pad.l - 10}" y="${yy + 4}" text-anchor="end" font-size="11" fill="var(--muted)" font-family="JetBrains Mono, monospace">${usd(v, 1)}</text>`;
   }).join("");
   const labelEvery = Math.ceil(data.length / 6);
   const yr = rangeDays === 0 || rangeDays > 90 ? "2-digit" : undefined;
-  const xl = data.map((d, i) => (i % labelEvery === 0 ? `<text x="${x(i)}" y="${H - 6}" text-anchor="middle" font-size="11" fill="var(--muted)">${new Date(d[0] * 1000).toLocaleDateString(undefined, { month: "short", day: "numeric", year: yr })}</text>` : "")).join("");
+  const xl = data.map((d, i) => (i % labelEvery === 0 ? `<text x="${x(i)}" y="${H - 6}" text-anchor="middle" font-size="11" fill="var(--muted)" font-family="JetBrains Mono, monospace">${new Date(d[0] * 1000).toLocaleDateString(undefined, { month: "short", day: "numeric", year: yr })}</text>` : "")).join("");
   const bars = data.map((d, i) => {
     const yy = y(d[1]);
-    return `<rect class="bar" x="${x(i) - bw / 2}" y="${yy}" width="${bw}" height="${Math.max(0, H - pad.b - yy)}" rx="${Math.min(4, bw / 2)}" fill="url(#${i === athIdx ? "gGold" : "gBlue"})" style="animation-delay:${animate ? i * stagger : 0}ms;${animate ? "" : "animation:none"}" data-i="${i}"/>`;
+    return `<rect class="bar" x="${x(i) - bw / 2}" y="${yy}" width="${bw}" height="${Math.max(0, H - pad.b - yy)}" fill="url(#${i === athIdx ? "pLilac" : "pBlue"})" stroke="${i === athIdx ? "#b45fe0" : "#0000ff"}" stroke-width="1" vector-effect="non-scaling-stroke" style="animation-delay:${animate ? i * stagger : 0}ms;${animate ? "" : "animation:none"}" data-i="${i}"/>`;
   }).join("");
-  const athMark = athIdx >= 0 ? `<g class="ath-label" style="${animate ? "" : "animation:none"}"><rect x="${x(athIdx) - 20}" y="${y(data[athIdx][1]) - 24}" width="40" height="18" rx="9" fill="var(--gold)"/><text x="${x(athIdx)}" y="${y(data[athIdx][1]) - 11}" text-anchor="middle" font-size="10" font-weight="700" fill="#1a1200">ATH</text></g>` : "";
+  const athMark = athIdx >= 0 ? `<g class="ath-label" style="${animate ? "" : "animation:none"}"><rect x="${x(athIdx) - 22}" y="${y(data[athIdx][1]) - 26}" width="44" height="18" rx="3" fill="#0000ff"/><text x="${x(athIdx)}" y="${y(data[athIdx][1]) - 13}" text-anchor="middle" font-size="10" font-family="Silkscreen, monospace" fill="#fff">ATH</text></g>` : "";
 
   el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Daily DEX volume on Base">
     <defs>
-      <linearGradient id="gBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4d8dff"/><stop offset="1" stop-color="#0052ff" stop-opacity=".55"/></linearGradient>
-      <linearGradient id="gGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd966"/><stop offset="1" stop-color="#ff9f1a"/></linearGradient>
+      <pattern id="pBlue" width="3" height="3" patternUnits="userSpaceOnUse"><rect width="3" height="3" fill="#fff"/><rect width="1" height="3" fill="#0000ff"/></pattern>
+      <pattern id="pLilac" width="3" height="3" patternUnits="userSpaceOnUse"><rect width="3" height="3" fill="#fff"/><rect width="1.6" height="3" fill="#d58ff5"/></pattern>
     </defs>${ticks}${bars}${athMark}${xl}</svg><div class="tip"></div>`;
   const svg = el.querySelector("svg"), tip = el.querySelector(".tip");
   let hot = null;
@@ -95,7 +97,7 @@ function drawChart(animate = true) {
     if (hot) hot.classList.remove("hot");
     hot = svg.querySelector(`.bar[data-i="${i}"]`);
     hot?.classList.add("hot");
-    tip.innerHTML = `<b>${usd(d[1])}</b>${i === athIdx ? ' <span style="color:var(--gold)">★ ATH</span>' : ""}<br><span class="muted">${dateStr(d[0])}</span>`;
+    tip.innerHTML = `<b>${usd(d[1])}</b>${i === athIdx ? ' <span style="color:#b45fe0">★ ATH</span>' : ""}<br><span class="muted">${dateStr(d[0])}</span>`;
     tip.style.left = (x(i) / W) * r.width + "px";
     tip.style.top = (y(d[1]) / H) * r.height + "px";
     tip.classList.add("show");
