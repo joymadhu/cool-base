@@ -2,6 +2,7 @@ import { DEXSCREENER, TOKENS, MEMES } from "../config.js";
 import { $ } from "../lib/dom.js";
 import { getJSON } from "../lib/api.js";
 import { usd, price, pct, esc } from "../lib/format.js";
+import { setMemeStats } from "../ui/mosaic.js";
 
 async function lookup(symbol) {
   const d = await getJSON(DEXSCREENER + encodeURIComponent(symbol));
@@ -76,7 +77,10 @@ export async function loadMemes() {
     <div class="row"><span>Market cap</span><span>${usd(t.mcap)}</span></div>
     <div class="row"><span>Txns 24h</span><span>${t.txns.toLocaleString()}</span></div>
   </a>`).join("") || '<p class="muted">Meme data unavailable right now.</p>';
-  if (list.length) memeFirst = false;
+  if (list.length) {
+    memeFirst = false;
+    setMemeStats({ count: list.length, volume: list.reduce((a, t) => a + t.volume, 0), txns: list.reduce((a, t) => a + t.txns, 0) });
+  }
 }
 
 export function renderTicker() {

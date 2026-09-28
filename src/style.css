@@ -141,7 +141,11 @@ main { max-width: 1200px; margin: 0 auto; padding: 24px 32px 40px; display: flex
 .m-blue { background: #3c8aff; }
 .m-label { position: absolute; left: 16px; bottom: 16px; z-index: 1; display: flex; flex-direction: column; gap: 2px; background: #fff; border-radius: 10px; padding: 10px 14px; max-width: calc(100% - 32px); transform: translateY(0); transition: transform .3s var(--spring); }
 .mosaic:hover .m-label { transform: translateY(-4px); }
-.m-label .px { font-size: 11px; color: var(--blue); }
+.m-label .px { font-size: 11px; color: var(--blue); display: inline-flex; align-items: center; gap: 6px; }
+.m-label .dot { width: 6px; height: 6px; }
+.m-label b { font-variant-numeric: tabular-nums; }
+.m-label b.bump { animation: bump .5s var(--spring); }
+@keyframes bump { 30% { transform: translateY(-2px); color: var(--blue); } }
 .m-label b { font-size: 14px; font-weight: 600; letter-spacing: -.01em; }
 
 /* ---------- chain strip ---------- */

@@ -3,6 +3,7 @@ import { $, stamp } from "../lib/dom.js";
 import { rpc } from "../lib/api.js";
 import { countTo } from "../lib/countTo.js";
 import { short, ago, hex, weiToEth } from "../lib/format.js";
+import { pushBlock } from "../ui/mosaic.js";
 
 const blocks = new Map();
 let latest = 0;
@@ -27,6 +28,8 @@ export async function pollBlocks() {
       });
       if (n === headNum) renderTxs(b);
     });
+    // Feed new blocks, oldest first, into the live mosaics.
+    [...blocks.values()].filter((b) => b.number > latest).sort((a, b) => a.number - b.number).forEach((b) => pushBlock(b));
     latest = headNum;
     [...blocks.keys()].sort((a, b) => a - b).slice(0, Math.max(0, blocks.size - MAX_BLOCKS)).forEach((k) => blocks.delete(k));
     renderBlocks();
