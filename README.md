@@ -1,4 +1,4 @@
-# Base School
+# Base Cool
 
 A live dashboard for the [Base](https://base.org) chain. It shows:
 

@@ -141,8 +141,8 @@ tr:last-child td { border-bottom: 0; }
 .meme .price { font-size: 20px; font-weight: 700; }
 .rank { font-size: 12px; font-weight: 700; color: var(--base-2); }
 
-.school h4 { margin: 12px 0 6px; color: var(--base-2); }
-.school p { margin: 0; color: var(--muted); font-size: 15px; }
+.learn h4 { margin: 12px 0 6px; color: var(--base-2); }
+.learn p { margin: 0; color: var(--muted); font-size: 15px; }
 
 .footer { max-width: 1200px; margin: 0 auto; padding: 24px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; color: var(--muted); font-size: 13px; }
 

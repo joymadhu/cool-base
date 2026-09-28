@@ -1,4 +1,4 @@
-// Base School — live Base chain dashboard. No build step, no dependencies.
+// Base Cool — live Base chain dashboard. No build step, no dependencies.
 (() => {
   "use strict";
 
