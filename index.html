@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Base School</title>
+  <meta name="description" content="Base School — live Base chain blocks, activity, 24h and all-time-high volume, tokens and memes.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='16' fill='%230052FF'/><rect x='6' y='14' width='20' height='4' rx='2' fill='white'/></svg>">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#top">
+      <span class="logo" aria-hidden="true"></span>
+      <span>Base <b>School</b></span>
+    </a>
+    <nav class="nav">
+      <a href="#overview">Overview</a>
+      <a href="#volume">Volume</a>
+      <a href="#blocks">Blocks</a>
+      <a href="#activity">Activity</a>
+      <a href="#tokens">Tokens</a>
+      <a href="#memes">Memes</a>
+    </nav>
+    <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">◐</button>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-text">
+        <span class="pill"><span class="dot live"></span> Live on Base mainnet</span>
+        <h1>Base <span class="grad">School</span></h1>
+        <p>Learn Base by watching it: live blocks, on-chain activity, 24h and all-time-high volume, top tokens and the memes everyone's trading.</p>
+      </div>
+      <div class="hero-block" aria-hidden="true">
+        <div class="cube"></div>
+      </div>
+    </section>
+
+    <section id="overview" class="grid stats">
+      <article class="card stat"><h3>Latest block</h3><p class="big mono" id="statBlock">—</p><span class="sub" id="statBlockAge">loading…</span></article>
+      <article class="card stat"><h3>Avg block time</h3><p class="big" id="statBlockTime">—</p><span class="sub">last 10 blocks</span></article>
+      <article class="card stat"><h3>Transactions / sec</h3><p class="big" id="statTps">—</p><span class="sub">last 10 blocks</span></article>
+      <article class="card stat"><h3>Gas price</h3><p class="big" id="statGas">—</p><span class="sub">gwei</span></article>
+      <article class="card stat accent"><h3>24h DEX volume</h3><p class="big" id="statVol24">—</p><span class="sub" id="statVolChange">—</span></article>
+      <article class="card stat gold"><h3>All-time-high daily volume</h3><p class="big" id="statAth">—</p><span class="sub" id="statAthDate">—</span></article>
+      <article class="card stat"><h3>7d DEX volume</h3><p class="big" id="statVol7">—</p><span class="sub">all Base DEXs</span></article>
+      <article class="card stat"><h3>Total value locked</h3><p class="big" id="statTvl">—</p><span class="sub">DeFi on Base</span></article>
+    </section>
+
+    <section id="volume" class="card">
+      <div class="card-head">
+        <h2>Daily DEX volume</h2>
+        <div class="seg" id="rangeSeg">
+          <button data-days="30">30D</button>
+          <button data-days="90" class="on">90D</button>
+          <button data-days="365">1Y</button>
+          <button data-days="0">All</button>
+        </div>
+      </div>
+      <div id="volChart" class="chart"><p class="muted">Loading volume history…</p></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>DEX</th><th class="r">24h volume</th><th class="r">Share</th></tr></thead>
+          <tbody id="dexRows"><tr><td colspan="4" class="muted">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="grid two">
+      <section id="blocks" class="card">
+        <div class="card-head"><h2>Latest blocks</h2><span class="pill small"><span class="dot live"></span> auto-refresh</span></div>
+        <ul class="list" id="blockList"><li class="muted">Loading blocks…</li></ul>
+      </section>
+      <section id="activity" class="card">
+        <div class="card-head"><h2>Live activity</h2><span class="sub" id="activityBlock"></span></div>
+        <ul class="list" id="txList"><li class="muted">Loading transactions…</li></ul>
+      </section>
+    </div>
+
+    <section id="tokens" class="card">
+      <div class="card-head"><h2>Top tokens by 24h volume</h2><span class="sub">via DexScreener</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Token</th><th class="r">Price</th><th class="r">24h</th><th class="r">24h volume</th><th class="r">Liquidity</th><th class="r hide-sm">Txns 24h</th></tr></thead>
+          <tbody id="tokenRows"><tr><td colspan="6" class="muted">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="memes" class="card">
+      <div class="card-head"><h2>Meme board 🐸</h2><span class="sub">Base memecoins, ranked by 24h volume</span></div>
+      <div class="meme-grid" id="memeGrid"><p class="muted">Loading memes…</p></div>
+    </section>
+
+    <section class="card school">
+      <h2>Base School 101</h2>
+      <div class="grid three">
+        <div><h4>What is Base?</h4><p>An Ethereum Layer 2 built on the OP Stack and incubated by Coinbase. Transactions settle to Ethereum at a fraction of the cost.</p></div>
+        <div><h4>Blocks</h4><p>Base produces a new block about every 2 seconds. Each block bundles transactions and is later posted to Ethereum.</p></div>
+        <div><h4>Volume</h4><p>DEX volume is the total USD value swapped on decentralized exchanges on Base. The all-time high is the busiest single day ever.</p></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>Base School · data from Base RPC, DefiLlama and DexScreener · not financial advice</span>
+    <span id="updated"></span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
