@@ -3,6 +3,7 @@ import "./style.css";
 import { BLOCK_POLL_MS, MARKET_POLL_MS } from "./config.js";
 import { stamp } from "./lib/dom.js";
 import { initMosaics } from "./ui/mosaic.js";
+import { initPixelCursor } from "./ui/pixelCursor.js";
 import { initMotion } from "./ui/motion.js";
 import { pollBlocks, renderBlockAges } from "./sections/blocks.js";
 import { initVolume, loadVolume } from "./sections/volume.js";
@@ -15,6 +16,7 @@ async function loadMarkets() {
 }
 
 initMosaics();
+initPixelCursor();
 initMotion();
 initVolume();
 

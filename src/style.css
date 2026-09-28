@@ -407,3 +407,6 @@ tr:last-child td { border-bottom: 0; }
 .list::-webkit-scrollbar, .table-wrap::-webkit-scrollbar, .chain::-webkit-scrollbar, .nav::-webkit-scrollbar { display: none; width: 0; height: 0; }
 /* Soft fade at the bottom of the block and transaction lists hints there's more to scroll. */
 .list { mask-image: linear-gradient(#000 calc(100% - 40px), transparent); -webkit-mask-image: linear-gradient(#000 calc(100% - 40px), transparent); padding-bottom: 24px; }
+
+/* Page-wide pixel hover trail (see src/ui/pixelCursor.js). */
+.pixel-cursor { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 15; mix-blend-mode: multiply; }
