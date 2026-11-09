@@ -44,7 +44,7 @@ export function initMotion() {
 
   const sectionIds = ["overview", "volume", "blocks", "activity", "tokens", "memes"];
   const sectionIO = new IntersectionObserver((entries) => {
-    entries.forEach((e) => { if (e.isIntersecting && scrollY >= 200) setActive(e.target.id === "activity" ? "blocks" : e.target.id); });
+    entries.forEach((e) => { if (e.isIntersecting && scrollY >= 200) setActive(e.target.id); });
   }, { rootMargin: "-45% 0px -50% 0px" });
   sectionIds.forEach((id) => { const s = $(id); if (s) sectionIO.observe(s); });
   addEventListener("resize", () => active && place(ink, active));
