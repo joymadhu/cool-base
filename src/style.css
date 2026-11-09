@@ -39,6 +39,8 @@ a { color: var(--blue); text-decoration: none; }
 .up { color: var(--green); }
 .down { color: var(--red); }
 ::selection { background: var(--blue); color: #fff; }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 6px; }
+.btn:focus-visible, .seg button:focus-visible, .menu-btn:focus-visible { outline-offset: 4px; }
 
 .eyebrow { display: inline-block; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; color: var(--blue); margin-bottom: 6px; }
 
@@ -95,6 +97,7 @@ a { color: var(--blue); text-decoration: none; }
 .tick img { width: 16px; height: 16px; border-radius: 4px; }
 .tick .up { color: #9dffc6; }
 .tick .down { color: #ffc4c6; }
+.tick.muted { color: rgba(255, 255, 255, .85); border-right: 0; }
 @keyframes marquee { to { transform: translateX(-50%); } }
 
 .progress { height: 3px; background: var(--soft); }
@@ -104,7 +107,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 24px 32px 40px; display: flex
 
 /* ---------- hero ---------- */
 .hero { display: grid; grid-template-columns: 1.05fr 1fr; align-items: center; gap: 32px; padding: 40px 0 0; min-height: 520px; }
-.hero h1 { font-size: clamp(44px, 6.4vw, 84px); line-height: .98; margin: 10px 0 20px; letter-spacing: -0.045em; font-weight: 500; color: #666c7a; }
+.hero h1 { font-size: clamp(44px, 6.4vw, 84px); line-height: .98; margin: 10px 0 20px; letter-spacing: -0.045em; font-weight: 500; color: var(--ink); }
 .hl { color: var(--blue); position: relative; white-space: nowrap; }
 .hl::after { content: ""; position: absolute; left: 0; right: 0; bottom: .02em; height: .16em; background: var(--hatch-lilac); z-index: -1; transform-origin: left; animation: underline 1s var(--ease) .6s both; }
 @keyframes underline { from { transform: scaleX(0); } }
@@ -203,6 +206,12 @@ main { max-width: 1200px; margin: 0 auto; padding: 24px 32px 40px; display: flex
 .stat.airmail .big { color: var(--blue); }
 .stat.airmail:hover { border-color: transparent; }
 .sub { font-size: 13px; color: var(--muted); }
+/* Empty / error state for sections whose API didn't answer. */
+.empty { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-height: 120px; padding: 20px; border: 1.5px dashed var(--line-2); border-radius: 12px; color: var(--muted); font-size: 14px; text-align: center; white-space: normal; }
+.empty b { color: var(--ink); font-weight: 600; }
+.chart .empty { height: 100%; }
+td.empty-cell { padding: 12px 0; border: 0; white-space: normal; }
+.meme-grid > .empty { grid-column: 1 / -1; }
 .flash-up { animation: fu 1s var(--ease); }
 .flash-down { animation: fd 1s var(--ease); }
 @keyframes fu { 20% { color: var(--green); } }
@@ -329,7 +338,7 @@ tr:last-child td { border-bottom: 0; }
   .nav .n { display: none; }
   .nav a { padding: 7px 12px; }
 }
-@media (max-width: 860px) {
+@media (max-width: 960px) {
   .topbar { grid-template-columns: 1fr auto; }
   .nav { display: none; }
   .menu-btn { display: block; }
@@ -361,7 +370,7 @@ tr:last-child td { border-bottom: 0; }
   main { padding: 16px 16px 32px; gap: 28px; }
   .topbar { padding: 0 16px; height: 58px; }
   .status .px { display: none; }
-  .hero-art { height: 280px; }
+  .hero-art { height: 220px; }
   .hero h1 { font-size: 42px; }
   .hero p { font-size: 16px; }
   .stats { gap: 10px; }
@@ -370,7 +379,17 @@ tr:last-child td { border-bottom: 0; }
   .stat .big { font-size: 22px; }
   .card { padding: 16px; border-radius: 14px; }
   .card h2, .section-head h2 { font-size: 22px; }
-  .hide-sm, .share .track { display: none; }
+  .hide-sm, .share-col, .share .track { display: none; }
+  .table-wrap { margin-top: 12px; }
+  table { font-size: 13px; }
+  th, td { padding-left: 6px; padding-right: 6px; }
+  th:first-child, td:first-child { padding-left: 0; }
+  th:last-child, td:last-child { padding-right: 0; }
+  td { padding-top: 11px; padding-bottom: 11px; }
+  .tok { gap: 8px; }
+  .tok img, .avatar { width: 26px; height: 26px; border-radius: 6px; }
+  td .tok small { display: none; }
+  .card-head { margin-bottom: 12px; }
   .mosaics { gap: 10px; }
   .mosaic { height: 200px; border-radius: 16px; }
   .m-blue { height: 130px; }

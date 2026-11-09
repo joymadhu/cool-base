@@ -33,14 +33,14 @@ export async function loadVolume() {
         <td class="muted">${i + 1}</td>
         <td><div class="tok">${p.logo ? `<img src="${esc(p.logo)}" alt="" loading="lazy">` : `<span class="avatar">${esc((p.displayName || p.name)[0])}</span>`}${esc(p.displayName || p.name)}</div></td>
         <td class="r"><b>${usd(p.total24h)}</b></td>
-        <td class="r"><span class="share"><span class="track"><span class="fill" style="width:${share}%;animation-delay:${i * 60 + 200}ms"></span></span>${share.toFixed(1)}%</span></td>
+        <td class="r share-col"><span class="share"><span class="track"><span class="fill" style="width:${share}%;animation-delay:${i * 60 + 200}ms"></span></span>${share.toFixed(1)}%</span></td>
       </tr>`;
-    }).join("") || '<tr><td colspan="4" class="muted">No data</td></tr>';
+    }).join("") || '<tr><td colspan="4" class="empty-cell"><div class="empty">No DEX volume reported in the last 24h.</div></td></tr>';
     dexFirst = false;
   } catch (e) {
     console.warn(e);
-    if (!volSeries.length) $("volChart").innerHTML = '<p class="muted">Volume data unavailable right now.</p>';
-    $("dexRows").innerHTML = '<tr><td colspan="4" class="muted">Unavailable</td></tr>';
+    if (!volSeries.length) $("volChart").innerHTML = '<div class="empty"><b>Volume data is unavailable</b>DefiLlama didn\'t respond. Retrying every minute.</div>';
+    $("dexRows").innerHTML = '<tr><td colspan="4" class="empty-cell"><div class="empty"><b>DEX breakdown is unavailable</b>Retrying every minute.</div></td></tr>';
     ["statVol24", "statVol7", "statAth"].forEach((id) => { if ($(id).querySelector(".sk")) $(id).textContent = "—"; });
   }
   try {
@@ -72,7 +72,9 @@ function drawChart(animate = true) {
     return `<line x1="${pad.l}" x2="${W - pad.r}" y1="${yy}" y2="${yy}" stroke="${f ? "var(--line)" : "var(--ink)"}" stroke-width="${f ? 1 : 1.5}" stroke-dasharray="${f ? "2 4" : ""}"/>
       <text x="${pad.l - 10}" y="${yy + 4}" text-anchor="end" font-size="11" fill="var(--muted)" font-family="JetBrains Mono, monospace">${usd(v, 1)}</text>`;
   }).join("");
-  const labelEvery = Math.ceil(data.length / 6);
+  // Space date labels by the room available so they never overlap on narrow screens.
+  const maxLabels = Math.max(2, Math.min(6, Math.floor((W - pad.l - pad.r) / 84)));
+  const labelEvery = Math.ceil(data.length / maxLabels);
   const yr = rangeDays === 0 || rangeDays > 90 ? "2-digit" : undefined;
   const xl = data.map((d, i) => (i % labelEvery === 0 ? `<text x="${x(i)}" y="${H - 6}" text-anchor="middle" font-size="11" fill="var(--muted)" font-family="JetBrains Mono, monospace">${new Date(d[0] * 1000).toLocaleDateString(undefined, { month: "short", day: "numeric", year: yr })}</text>` : "")).join("");
   const bars = data.map((d, i) => {

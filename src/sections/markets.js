@@ -62,7 +62,7 @@ export async function loadTokens() {
     <td class="r"><b>${usd(t.volume)}</b></td>
     <td class="r hide-sm">${usd(t.liquidity)}</td>
     <td class="r hide-sm">${t.txns.toLocaleString()}</td>
-  </tr>`).join("") || '<tr><td colspan="6" class="muted">Token data unavailable right now.</td></tr>';
+  </tr>`).join("") || '<tr><td colspan="6" class="empty-cell"><div class="empty"><b>Token prices are unavailable</b>DexScreener didn\'t respond. Retrying every minute.</div></td></tr>';
   if (list.length) tokFirst = false;
 }
 
@@ -76,7 +76,7 @@ export async function loadMemes() {
     <div class="row"><span>24h volume</span><b>${usd(t.volume)}</b></div>
     <div class="row"><span>Market cap</span><span>${usd(t.mcap)}</span></div>
     <div class="row"><span>Txns 24h</span><span>${t.txns.toLocaleString()}</span></div>
-  </a>`).join("") || '<p class="muted">Meme data unavailable right now.</p>';
+  </a>`).join("") || '<div class="empty"><b>Meme prices are unavailable</b>DexScreener didn\'t respond. Retrying every minute.</div>';
   if (list.length) {
     memeFirst = false;
     setMemeStats({ count: list.length, volume: list.reduce((a, t) => a + t.volume, 0), txns: list.reduce((a, t) => a + t.txns, 0) });
